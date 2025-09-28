@@ -206,170 +206,345 @@ The `<hh:font>` element supports different languages via the `lang` attribute:
 
 ### ParaShapeType
 **XML Element**: `<hh:parashape>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/head`  
+**Parent Element**: `<hh:parashapes>`  
 **Purpose**: Defines paragraph-level formatting including alignment, spacing, and indentation.
 
-**Attributes**:
-- `id`: Unique identifier
-- `align`: Text alignment (left, center, right, justify, distribute)
-- `heading`: Outline heading level
-- `breakSetting`: Page and column break behavior
-- `condense`: Text condensation percentage
-- `fontLineHeight`: Line height calculation method
-- `snapToGrid`: Whether to snap to document grid
-- `suppressLineNumbers`: Whether to suppress line numbering
-- `checked`: Checkbox state for list items
+**XML Schema Definition**:
+```xml
+<hh:parashape id="0" align="LEFT" heading="0" breakSetting="0" 
+              condense="0" fontLineHeight="false" snapToGrid="false" 
+              suppressLineNumbers="false" checked="false">
+    <hh:margin left="0" right="0" first="0" hanging="0"/>
+    <hh:lineSpacing type="PERCENT" value="160" unit="PERCENT"/>
+    <hh:border borderFillIDRef="1"/>
+    <hh:autoSpacing eParaHeadTail="false" eParaTail="false" 
+                    eParaHead="false" eParaMiddle="false"/>
+</hh:parashape>
+```
 
-**Child Elements**:
-- `margin`: Paragraph margins (left, right, first line, hanging)
-- `lineSpacing`: Line spacing definitions
-- `border`: Paragraph border settings
-- `autoSpacing`: Automatic spacing between paragraphs
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | integer | Yes | Unique identifier |
+| `align` | enum | No | Text alignment: "LEFT", "CENTER", "RIGHT", "JUSTIFY", "DISTRIBUTE" |
+| `heading` | integer | No | Outline heading level |
+| `breakSetting` | integer | No | Page and column break behavior flags |
+| `condense` | integer | No | Text condensation percentage |
+| `fontLineHeight` | boolean | No | Line height calculation method |
+| `snapToGrid` | boolean | No | Whether to snap to document grid |
+| `suppressLineNumbers` | boolean | No | Whether to suppress line numbering |
+| `checked` | boolean | No | Checkbox state for list items |
+
+**XML Child Elements**:
+| Element | XML Tag | Attributes | Description |
+|---------|---------|------------|-------------|
+| Margins | `<hh:margin>` | left, right, first, hanging | Paragraph margin specifications |
+| Line Spacing | `<hh:lineSpacing>` | type, value, unit | Line spacing definitions |
+| Border | `<hh:border>` | borderFillIDRef | Reference to border/fill definition |
+| Auto Spacing | `<hh:autoSpacing>` | eParaHeadTail, eParaTail, eParaHead, eParaMiddle | Automatic spacing between paragraphs |
 
 ### BorderFillType
 **XML Element**: `<hh:borderfill>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/head`  
+**Parent Element**: `<hh:borderfills>`  
 **Purpose**: Defines border and background fill styles for various elements.
 
-**Attributes**:
-- `id`: Unique identifier
-- `threeD`: 3D border effect settings
-- `shadow`: Shadow effect settings
+**XML Schema Definition**:
+```xml
+<hh:borderfill id="1" threeD="false" shadow="false">
+    <hh:slash type="NONE" crooked="false" isCounter="false"/>
+    <hh:leftBorder type="NONE" width="0" color="0"/>
+    <hh:rightBorder type="NONE" width="0" color="0"/>
+    <hh:topBorder type="NONE" width="0" color="0"/>
+    <hh:bottomBorder type="NONE" width="0" color="0"/>
+    <hh:diagonal type="NONE" width="0" color="0"/>
+    <hh:fillBrush>
+        <hh:windowBrush faceColor="4294967295" hatchColor="0" hatchStyle="HS_HORIZONTAL"/>
+    </hh:fillBrush>
+</hh:borderfill>
+```
 
-**Child Elements**:
-- `slash`: Diagonal line patterns
-- `borders`: Individual border definitions (left, right, top, bottom)
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | integer | Yes | Unique identifier |
+| `threeD` | boolean | No | 3D border effect settings |
+| `shadow` | boolean | No | Shadow effect settings |
 
-**Border Properties**:
-- Line style (solid, dotted, dashed, double, etc.)
-- Line width and color
-- Corner styles and rounding
+**XML Child Elements**:
+| Element | XML Tag | Attributes | Description |
+|---------|---------|------------|-------------|
+| Slash Pattern | `<hh:slash>` | type, crooked, isCounter | Diagonal line patterns |
+| Border Sides | `<hh:leftBorder>`, `<hh:rightBorder>`, `<hh:topBorder>`, `<hh:bottomBorder>` | type, width, color | Individual border definitions |
+| Diagonal | `<hh:diagonal>` | type, width, color | Diagonal border |
+| Fill Brush | `<hh:fillBrush>` | - | Background fill definition |
 
-**Fill Properties**:
-- Solid colors with transparency
-- Gradient fills (linear, radial, patterns)
-- Image backgrounds and textures
-- Pattern fills and hatching
+**Border Line Types**: `NONE`, `SOLID`, `THICK`, `DOUBLE`, `DOTTED`, `DASHED`, `DASHDOTTED`, `DASHDOTDOTTED`, `LONGDASH`, `CIRCLED`, `DOUBLE_SLIM`, `SLIM_THICK`, `THICK_SLIM`, `SLIM_THICK_SLIM`, `WAVE`, `DOUBLE_WAVE`, `THICK_3D`, `THICK_3D_LOWERED`, `3D`, `3D_LOWERED`
 
 ### StyleType
 **XML Element**: `<hh:style>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/head`  
+**Parent Element**: `<hh:styles>`  
 **Purpose**: Named style definitions that combine character and paragraph formatting.
 
-**Attributes**:
-- `id`: Unique identifier
-- `type`: Style type ("PARA" for paragraph, "CHAR" for character)
-- `name`: User-visible style name
-- `engName`: English name for the style
-- `paraPr`: Reference to paragraph shape
-- `charPr`: Reference to character shape
-- `nextStyle`: Style to apply to following paragraphs
-- `langId`: Language identifier
-- `lockForm`: Whether style formatting is locked
+**XML Schema Definition**:
+```xml
+<hh:style id="0" type="PARA" name="본문" engName="Normal" 
+          paraPr="0" charPr="0" nextStyle="0" langId="1042" lockForm="false">
+    <!-- Style properties are referenced through paraPr and charPr IDs -->
+</hh:style>
+```
+
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | integer | Yes | Unique identifier |
+| `type` | enum | Yes | Style type: "PARA" (paragraph), "CHAR" (character) |
+| `name` | string | Yes | User-visible style name |
+| `engName` | string | No | English name for the style |
+| `paraPr` | integer | No | Reference to paragraph shape ID |
+| `charPr` | integer | No | Reference to character shape ID |
+| `nextStyle` | integer | No | Style ID to apply to following paragraphs |
+| `langId` | integer | No | Language identifier (1042 = Korean) |
+| `lockForm` | boolean | No | Whether style formatting is locked |
 
 ### NumberingType
 **XML Element**: `<hh:numbering>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/head`  
+**Parent Element**: `<hh:numberings>`  
 **Purpose**: Defines numbering schemes for ordered lists and outline numbering.
 
-**Attributes**:
-- `id`: Unique identifier
+**XML Schema Definition**:
+```xml
+<hh:numbering id="0">
+    <hh:paraHead level="0" align="LEFT" useInstWidth="false" 
+                 autoIndent="true" widthAdjust="false" 
+                 textOffsetType="PERCENT" textOffset="50" 
+                 numFormat="DIGIT" charShape="0">
+        <hh:start value="1"/>
+    </hh:paraHead>
+    <hh:paraHead level="1" align="LEFT" useInstWidth="false" 
+                 autoIndent="true" widthAdjust="false" 
+                 textOffsetType="PERCENT" textOffset="50" 
+                 numFormat="CIRCLED_DIGIT" charShape="0">
+        <hh:start value="1"/>
+    </hh:paraHead>
+    <!-- Additional levels as needed -->
+</hh:numbering>
+```
 
-**Child Elements**:
-- `paraHead`: Paragraph heading definitions for each level
-- `start`: Starting numbers for each level
-- `format`: Number formatting (decimal, roman, letters, etc.)
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | integer | Yes | Unique identifier |
 
-**Numbering Formats**:
-- Decimal (1, 2, 3...)
-- Upper/lower Roman (I, II, III... or i, ii, iii...)
-- Upper/lower letters (A, B, C... or a, b, c...)
-- Korean numbering systems
-- Custom format strings
+**XML Child Elements**:
+| Element | XML Tag | Attributes | Description |
+|---------|---------|------------|-------------|
+| Paragraph Head | `<hh:paraHead>` | level, align, useInstWidth, autoIndent, widthAdjust, textOffsetType, textOffset, numFormat, charShape | Numbering definition for each level |
+| Start Number | `<hh:start>` | value | Starting number for the level |
+
+**Numbering Formats** (numFormat attribute):
+- `DIGIT`: Decimal (1, 2, 3...)
+- `CIRCLED_DIGIT`: Circled decimal (①, ②, ③...)
+- `ROMAN_CAPITAL`: Upper Roman (I, II, III...)
+- `ROMAN_SMALL`: Lower Roman (i, ii, iii...)
+- `LETTER_CAPITAL`: Upper letters (A, B, C...)
+- `LETTER_SMALL`: Lower letters (a, b, c...)
+- `HANGUL_SYLLABLE`: Korean syllables (가, 나, 다...)
+- `HANGUL_JAMO`: Korean jamo (ㄱ, ㄴ, ㄷ...)
+- `HANGUL_PHONETIC`: Korean phonetic
+- `IDEOGRAPH_DIGITAL`: Chinese numerals
 
 ### BulletType
 **XML Element**: `<hh:bullet>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/head`  
+**Parent Element**: `<hh:bullets>`  
 **Purpose**: Defines bullet styles for unordered lists.
 
-**Attributes**:
-- `id`: Unique identifier
-- `char`: Bullet character
-- `checkedChar`: Character for checked items
-- `useImage`: Whether to use image bullets
+**XML Schema Definition**:
+```xml
+<hh:bullet id="0" char="●" checkedChar="☑" useImage="false">
+    <hh:img src="BIN0001.png" embedded="true" binaryItem="BIN0001"/>
+</hh:bullet>
+```
 
-**Image Bullets**: Can reference embedded images for custom bullet appearance.
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | integer | Yes | Unique identifier |
+| `char` | string | No | Bullet character (Unicode) |
+| `checkedChar` | string | No | Character for checked items |
+| `useImage` | boolean | No | Whether to use image bullets |
 
-## Section Objects (Document Structure)
+**XML Child Elements**:
+| Element | XML Tag | Attributes | Description |
+|---------|---------|------------|-------------|
+| Image Bullet | `<hh:img>` | src, embedded, binaryItem | Image source for custom bullets |
+
+## Section Objects (Document Structure XML)
 
 ### SectionType
 **XML Element**: `<hs:sec>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/section`  
 **Purpose**: Major document divisions with independent page layout and content flow.
 
-**Child Elements**:
-- Content paragraphs and objects
-- Page layout definitions
-- Headers and footers
-- Column specifications
+**XML Schema Definition**:
+```xml
+<hs:sec xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section"
+        xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph">
+    <hs:secPr>
+        <hs:pageSz width="59528" height="84188"/>
+        <hs:pageMargin left="8504" right="8504" top="5668" bottom="4536" 
+                       header="4536" footer="4536" gutter="0"/>
+        <hs:landscape value="false"/>
+        <hs:cols type="1" layout="LEFT"/>
+    </hs:secPr>
+    
+    <!-- Section content -->
+    <hp:p paraShapeIDRef="0" styleIDRef="0">
+        <hp:run charShapeIDRef="0">
+            <hp:t>Section content here</hp:t>
+        </hp:run>
+    </hp:p>
+</hs:sec>
+```
+
+**XML Child Elements**:
+| Element | XML Tag | Namespace | Description |
+|---------|---------|-----------|-------------|
+| Section Properties | `<hs:secPr>` | hs | Page layout and formatting |
+| Page Size | `<hs:pageSz>` | hs | Page dimensions |
+| Page Margins | `<hs:pageMargin>` | hs | Page margin settings |
+| Landscape | `<hs:landscape>` | hs | Page orientation |
+| Columns | `<hs:cols>` | hs | Column layout specification |
+| Paragraphs | `<hp:p>` | hp | Content paragraphs |
+| Objects | Various | hp | Tables, images, drawings, etc. |
 
 **Properties**:
-- Page dimensions and orientation
-- Margin settings
-- Multi-column layout
-- Section break behavior
+- Page dimensions in HWPML units (1/7200 inch)
+- Margin settings for all sides plus header/footer
+- Multi-column layout support
+- Section break behavior control
 
-## Paragraph Objects (Content Organization)
+## Paragraph Objects (Content Organization XML)
 
 ### PType (Paragraph)
 **XML Element**: `<hp:p>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
 **Purpose**: Container for text and inline objects with paragraph-level formatting.
 
-**Attributes**:
-- `paraShapeIDRef`: Reference to paragraph shape definition
-- `styleIDRef`: Reference to named style
-- `pageBreak`: Page break behavior
-- `columnBreak`: Column break behavior
+**XML Schema Definition**:
+```xml
+<hp:p paraShapeIDRef="0" styleIDRef="0" pageBreak="false" columnBreak="false">
+    <hp:run charShapeIDRef="0">
+        <hp:t>This is paragraph text content.</hp:t>
+    </hp:run>
+    <hp:run charShapeIDRef="1">
+        <hp:t>Text with different formatting.</hp:t>
+    </hp:run>
+    <hp:lineseg/>
+</hp:p>
+```
 
-**Child Elements**:
-- `run`: Text runs with character formatting
-- `lineseg`: Line break indicators
-- `ctrl`: Control characters and special elements
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `paraShapeIDRef` | integer | No | Reference to paragraph shape definition |
+| `styleIDRef` | integer | No | Reference to named style |
+| `pageBreak` | boolean | No | Force page break before paragraph |
+| `columnBreak` | boolean | No | Force column break before paragraph |
+
+**XML Child Elements**:
+| Element | XML Tag | Occurrence | Description |
+|---------|---------|------------|-------------|
+| Text Run | `<hp:run>` | 0..* | Text segments with character formatting |
+| Line Segment | `<hp:lineseg>` | 0..* | Line break indicators |
+| Control | `<hp:ctrl>` | 0..* | Control characters and special elements |
 
 ### RunType
 **XML Element**: `<hp:run>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: `<hp:p>`  
 **Purpose**: Sequence of text with consistent character formatting.
 
-**Attributes**:
-- `charShapeIDRef`: Reference to character shape definition
+**XML Schema Definition**:
+```xml
+<hp:run charShapeIDRef="0">
+    <hp:t>Regular text content</hp:t>
+    <hp:char code="9" val="&#9;"/>  <!-- Tab character -->
+    <hp:nbspace/>  <!-- Non-breaking space -->
+    <hp:lineBreak/>  <!-- Manual line break -->
+    <hp:bookmark name="bookmark1"/>
+    <hp:markpenBegin/>
+    <hp:t>Highlighted text</hp:t>
+    <hp:markpenEnd/>
+</hp:run>
+```
 
-**Child Elements**:
-- `t`: Plain text content
-- `char`: Special characters
-- `tab`: Tab characters
-- `nbspace`: Non-breaking spaces
-- `hypen`: Hyphenation points
-- `fwspace`: Fixed-width spaces
-- `lineBreak`: Manual line breaks
-- `indexmark`: Index entry markers
-- `bookmark`: Bookmark definitions
-- `markpenBegin`/`markpenEnd`: Highlight markers
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `charShapeIDRef` | integer | No | Reference to character shape definition |
+
+**XML Child Elements**:
+| Element | XML Tag | Attributes | Description |
+|---------|---------|------------|-------------|
+| Text Content | `<hp:t>` | - | Plain Unicode text |
+| Special Character | `<hp:char>` | code, val | Special/control characters |
+| Tab | `<hp:tab>` | - | Tab character |
+| Non-breaking Space | `<hp:nbspace>` | - | Non-breaking space |
+| Hyphen | `<hp:hypen>` | - | Hyphenation point |
+| Fixed-width Space | `<hp:fwspace>` | - | Fixed-width space |
+| Line Break | `<hp:lineBreak>` | - | Manual line break |
+| Index Mark | `<hp:indexmark>` | keyword1, keyword2 | Index entry marker |
+| Bookmark | `<hp:bookmark>` | name | Bookmark definition |
+| Highlight Begin | `<hp:markpenBegin>` | - | Start of highlighted text |
+| Highlight End | `<hp:markpenEnd>` | - | End of highlighted text |
 
 ### T (Text)
 **XML Element**: `<hp:t>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: `<hp:run>`  
 **Purpose**: Plain text content within a text run.
 
-**Content**: Unicode text string
-**Attributes**: None - pure text content
+**XML Schema Definition**:
+```xml
+<hp:t>This is plain Unicode text content.</hp:t>
+```
+
+**Content**: Unicode text string  
+**Attributes**: None - contains pure text content  
+**Character Encoding**: UTF-8/UTF-16 Unicode
 
 ### Char (Special Character)
 **XML Element**: `<hp:char>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: `<hp:run>`  
 **Purpose**: Special characters requiring specific handling or rendering.
 
-**Attributes**:
-- `code`: Character code or identifier
-- `val`: Character value or replacement text
+**XML Schema Definition**:
+```xml
+<hp:char code="9" val="&#9;"/>      <!-- Tab -->
+<hp:char code="13" val="&#13;"/>    <!-- Carriage return -->
+<hp:char code="8203" val="&#8203;"/> <!-- Zero-width space -->
+<hp:char code="8364" val="€"/>      <!-- Euro symbol -->
+```
 
-**Special Character Types**:
-- Mathematical symbols
-- Diacritical marks
-- Control characters
-- Custom symbols
-- Placeholder characters
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `code` | integer | Yes | Unicode character code point |
+| `val` | string | No | Character value or replacement text |
+
+**Special Character Categories**:
+- **Control Characters**: Tab (9), Line Feed (10), Carriage Return (13)
+- **Mathematical Symbols**: Various Unicode math symbols
+- **Diacritical Marks**: Combining diacritical marks
+- **Typography**: Em dash, en dash, various quotes
+- **Currency**: Euro (€), Yen (¥), Pound (£), etc.
+- **Zero-width Characters**: Zero-width space, joiner, non-joiner
 
 ## Table Objects (Tabular Data)
 
