@@ -1,82 +1,208 @@
 # HWPX Object Type Reference
 
-This document provides detailed specifications for every object type in the HWPX document model, organized by functional category.
+This document provides detailed XML specifications for every object type in the HWPX document model, focusing on XML elements, attributes, namespaces, and schema structure.
 
-## Head Objects (Document-Level Definitions)
+## XML Namespaces and Schema Overview
+
+HWPX documents are built using the OWPML (Open Word processing ML) XML schema with multiple namespaces. Understanding these namespaces is critical for working with HWPX objects:
+
+### Primary OWPML Namespaces
+
+| Prefix | Namespace URI | Purpose | Example Elements |
+|--------|---------------|---------|------------------|
+| `hh` | `http://www.hancom.co.kr/hwpml/2011/head` | Header definitions | `<hh:head>`, `<hh:fontface>`, `<hh:style>` |
+| `hs` | `http://www.hancom.co.kr/hwpml/2011/section` | Section structure | `<hs:sec>` |
+| `hp` | `http://www.hancom.co.kr/hwpml/2011/paragraph` | Paragraph content | `<hp:p>`, `<hp:run>`, `<hp:t>` |
+| `hc` | `http://www.hancom.co.kr/hwpml/2011/core` | Core elements | `<hc:sz>`, `<hc:pos>` |
+| `he` | `http://www.hancom.co.kr/hwpml/2011/etc` | Miscellaneous elements | `<he:reference>` |
+
+### Standard XML Namespaces
+
+| Prefix | Namespace URI | Purpose |
+|--------|---------------|---------|
+| `opf` | `http://www.idpf.org/2007/opf/` | Open Packaging Format |
+| `dc` | `http://purl.org/dc/elements/1.1/` | Dublin Core metadata |
+| `odf` | `urn:oasis:names:tc:opendocument:xmlns:manifest:1.0` | ODF manifest |
+| `ocf` | `urn:oasis:names:tc:opendocument:xmlns:container` | OCF container |
+
+### XML Schema Structure
+
+The HWPX XML schema follows a hierarchical structure:
+
+```xml
+<!-- Document root with namespace declarations -->
+<hh:head xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" 
+         xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph"
+         xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section"
+         xmlns:hc="http://www.hancom.co.kr/hwpml/2011/core"
+         version="1.31" secCnt="1">
+    
+    <!-- Document-level definitions -->
+    <hh:fontfaces>...</hh:fontfaces>
+    <hh:charshapes>...</hh:charshapes>
+    <hh:parashapes>...</hh:parashapes>
+    <hh:styles>...</hh:styles>
+</hh:head>
+```
+
+## Head Objects (Document-Level XML Definitions)
 
 ### HWPMLHeadType
 **XML Element**: `<hh:head>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/head`  
 **Purpose**: Root container for all document-level definitions including styles, fonts, and global settings.
 
-**Attributes**:
-- `version`: OWPML format version (e.g., "1.31")
-- `secCnt`: Number of sections in the document
+**XML Schema Definition**:
+```xml
+<hh:head xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" 
+         version="1.31" 
+         secCnt="1">
+    <hh:beginNum>...</hh:beginNum>
+    <hh:refList>...</hh:refList>
+    <hh:fontfaces>...</hh:fontfaces>
+    <hh:borderfills>...</hh:borderfills>
+    <hh:charshapes>...</hh:charshapes>
+    <hh:parashapes>...</hh:parashapes>
+    <hh:styles>...</hh:styles>
+    <hh:numberings>...</hh:numberings>
+    <hh:bullets>...</hh:bullets>
+</hh:head>
+```
 
-**Child Elements**:
-- `beginNum`: Starting numbers for various counters
-- `refList`: Reference mappings and lookup tables
-- `forbiddenWordList`: Words that cannot be hyphenated
-- `compatibleDocument`: Compatibility settings for different applications
-- `docOption`: Document behavior options
-- `trackChangeConfig`: Track changes configuration
-- `fontfaces`: Font definitions
-- `borderfills`: Border and fill style definitions
-- `charshapes`: Character formatting definitions
-- `parashapes`: Paragraph formatting definitions
-- `styles`: Named style definitions
-- `numberings`: Numbering scheme definitions
-- `bullets`: Bullet style definitions
-- `memoProperties`: Comment and annotation properties
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `version` | string | Yes | OWPML format version (e.g., "1.31") |
+| `secCnt` | integer | Yes | Number of sections in the document |
+
+**XML Child Elements**:
+| Element | XML Tag | Occurrence | Description |
+|---------|---------|------------|-------------|
+| Begin Numbers | `<hh:beginNum>` | 0..1 | Starting numbers for various counters |
+| Reference List | `<hh:refList>` | 0..1 | Reference mappings and lookup tables |
+| Forbidden Words | `<hh:forbiddenWordList>` | 0..1 | Words that cannot be hyphenated |
+| Compatible Document | `<hh:compatibleDocument>` | 0..1 | Compatibility settings |
+| Document Options | `<hh:docOption>` | 0..1 | Document behavior options |
+| Track Changes | `<hh:trackChangeConfig>` | 0..1 | Track changes configuration |
+| Font Faces | `<hh:fontfaces>` | 1 | Font definitions collection |
+| Border Fills | `<hh:borderfills>` | 1 | Border and fill style definitions |
+| Character Shapes | `<hh:charshapes>` | 1 | Character formatting definitions |
+| Paragraph Shapes | `<hh:parashapes>` | 1 | Paragraph formatting definitions |
+| Styles | `<hh:styles>` | 1 | Named style definitions |
+| Numberings | `<hh:numberings>` | 0..1 | Numbering scheme definitions |
+| Bullets | `<hh:bullets>` | 0..1 | Bullet style definitions |
+| Memo Properties | `<hh:memoProperties>` | 0..1 | Comment and annotation properties |
 
 ### FontfaceType
 **XML Element**: `<hh:fontface>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/head`  
+**Parent Element**: `<hh:fontfaces>`  
 **Purpose**: Defines a font family with language-specific variants and fallback options.
 
-**Attributes**:
-- `name`: Font family name
-- `type`: Font type ("ttf", "otf", "woff", etc.)
+**XML Schema Definition**:
+```xml
+<hh:fontface name="맑은 고딕" type="ttf">
+    <hh:font lang="HANGUL" name="맑은 고딕"/>
+    <hh:font lang="LATIN" name="Malgun Gothic"/>
+    <hh:font lang="HANJA" name="맑은 고딕"/>
+    <hh:font lang="JAPANESE" name="Malgun Gothic"/>
+    <hh:font lang="OTHER" name="Malgun Gothic"/>
+    <hh:font lang="SYMBOL" name="Malgun Gothic"/>
+    <hh:font lang="USER" name="Malgun Gothic"/>
+    <hh:substFont type="ttf" name="Arial"/>
+    <hh:typeInfo familyType="2" serifType="11" weight="5" 
+                 proportion="2" contrast="4" strokeVariation="5" 
+                 armStyle="5" letterform="2" midline="2" xHeight="4"/>
+</hh:fontface>
+```
 
-**Child Elements**:
-- `font`: Individual font definitions for different languages
-- `substFont`: Substitute font mappings
-- `typeInfo`: Font metrics and characteristics
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | string | Yes | Font family name |
+| `type` | enum | Yes | Font type: "ttf", "otf", "woff", "eot" |
 
-**Language Support**: Supports separate font definitions for:
-- Hangul (Korean)
-- Latin (Western characters)
-- Hanja (Chinese characters)
-- Japanese characters
-- Symbols and special characters
+**XML Child Elements**:
+| Element | XML Tag | Occurrence | Description |
+|---------|---------|------------|-------------|
+| Font Definition | `<hh:font>` | 1..* | Individual font per language |
+| Substitute Font | `<hh:substFont>` | 0..1 | Fallback font mapping |
+| Type Information | `<hh:typeInfo>` | 0..1 | Font metrics and characteristics |
+
+**Language-Specific Font Support**:
+The `<hh:font>` element supports different languages via the `lang` attribute:
+- `HANGUL`: Korean characters
+- `LATIN`: Western/Latin characters  
+- `HANJA`: Chinese characters
+- `JAPANESE`: Japanese characters
+- `SYMBOL`: Symbol characters
+- `OTHER`: Other character sets
+- `USER`: User-defined characters
 
 ### CharShapeType
 **XML Element**: `<hh:charshape>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/head`  
+**Parent Element**: `<hh:charshapes>`  
 **Purpose**: Defines character-level formatting that can be applied to text runs.
 
-**Attributes**:
-- `id`: Unique identifier for referencing
-- `height`: Base font size in points
-- `textColor`: Text color specification
-- `shadeColor`: Background color for text
-- `useFontSpace`: Whether to use font-specific spacing
-- `useKerning`: Whether to apply kerning
-- `symMark`: Symbol mark type for diacritics
+**XML Schema Definition**:
+```xml
+<hh:charshape id="0" height="1000" textColor="0" shadeColor="4294967295" 
+              useFontSpace="false" useKerning="false" symMark="0">
+    <hh:fontRef hangul="0" latin="0" hanja="0" japanese="0" 
+                other="0" symbol="0" user="0"/>
+    <hh:ratio hangul="100" latin="100" hanja="100" japanese="100" 
+              other="100" symbol="100" user="100"/>
+    <hh:spacing hangul="0" latin="0" hanja="0" japanese="0" 
+                other="0" symbol="0" user="0"/>
+    <hh:relSz hangul="100" latin="100" hanja="100" japanese="100" 
+              other="100" symbol="100" user="100"/>
+    <hh:offset hangul="0" latin="0" hanja="0" japanese="0" 
+               other="0" symbol="0" user="0"/>
+    <hh:italic hangul="false" latin="false" hanja="false" japanese="false" 
+               other="false" symbol="false" user="false"/>
+    <hh:bold hangul="false" latin="false" hanja="false" japanese="false" 
+             other="false" symbol="false" user="false"/>
+    <hh:underline type="none" shape="straight" color="0"/>
+    <hh:strikeout type="none" shape="straight" color="0"/>
+    <hh:outline type="none"/>
+    <hh:shadow type="none" color="0" offsetX="283" offsetY="283"/>
+    <hh:emboss type="none"/>
+    <hh:engrave type="none"/>
+    <hh:supscript type="none"/>
+    <hh:subscript type="none"/>
+</hh:charshape>
+```
 
-**Child Elements**:
-- `fontRef`: References to font faces for different languages
-- `ratio`: Scaling ratios for width/height
-- `spacing`: Character spacing adjustments
-- `relSz`: Relative size adjustments
-- `offset`: Baseline offset adjustments
-- `italic`: Italic formatting settings
-- `bold`: Bold formatting settings
-- `underline`: Underline style definitions
-- `strikeout`: Strikethrough formatting
-- `outline`: Text outline effects
-- `shadow`: Text shadow effects
-- `emboss`: Embossed text effects
-- `engrave`: Engraved text effects
-- `supscript`: Superscript positioning
-- `subscript`: Subscript positioning
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | integer | Yes | Unique identifier for referencing |
+| `height` | integer | Yes | Base font size in HWPML units (1000 = 10pt) |
+| `textColor` | integer | No | Text color as RGB integer |
+| `shadeColor` | integer | No | Background color for text |
+| `useFontSpace` | boolean | No | Whether to use font-specific spacing |
+| `useKerning` | boolean | No | Whether to apply kerning |
+| `symMark` | integer | No | Symbol mark type for diacritics |
+
+**XML Child Elements** (all language-specific):
+| Element | XML Tag | Attributes | Description |
+|---------|---------|------------|-------------|
+| Font References | `<hh:fontRef>` | hangul, latin, hanja, japanese, other, symbol, user | References to font faces |
+| Size Ratios | `<hh:ratio>` | hangul, latin, hanja, japanese, other, symbol, user | Width/height scaling ratios |
+| Character Spacing | `<hh:spacing>` | hangul, latin, hanja, japanese, other, symbol, user | Character spacing adjustments |
+| Relative Sizes | `<hh:relSz>` | hangul, latin, hanja, japanese, other, symbol, user | Relative size adjustments |
+| Baseline Offsets | `<hh:offset>` | hangul, latin, hanja, japanese, other, symbol, user | Baseline offset adjustments |
+| Italic Style | `<hh:italic>` | hangul, latin, hanja, japanese, other, symbol, user | Italic formatting per language |
+| Bold Style | `<hh:bold>` | hangul, latin, hanja, japanese, other, symbol, user | Bold formatting per language |
+| Underline | `<hh:underline>` | type, shape, color | Underline style definition |
+| Strikeout | `<hh:strikeout>` | type, shape, color | Strikethrough formatting |
+| Outline | `<hh:outline>` | type | Text outline effects |
+| Shadow | `<hh:shadow>` | type, color, offsetX, offsetY | Text shadow effects |
+| Emboss | `<hh:emboss>` | type | Embossed text effects |
+| Engrave | `<hh:engrave>` | type | Engraved text effects |
+| Superscript | `<hh:supscript>` | type | Superscript positioning |
+| Subscript | `<hh:subscript>` | type | Subscript positioning |
 
 ### ParaShapeType
 **XML Element**: `<hh:parashape>`  
