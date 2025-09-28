@@ -546,131 +546,291 @@ The `<hh:font>` element supports different languages via the `lang` attribute:
 - **Currency**: Euro (€), Yen (¥), Pound (£), etc.
 - **Zero-width Characters**: Zero-width space, joiner, non-joiner
 
-## Table Objects (Tabular Data)
+## Table Objects (Tabular Data XML)
 
 ### TableType
 **XML Element**: `<hp:tbl>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: `<hp:p>` (within control element)  
 **Purpose**: Structured tabular data with complex formatting capabilities.
 
-**Attributes**:
-- `inlineTable`: Whether table is inline or floating
-- `pageBreak`: Page break behavior
-- `repeatHeader`: Whether to repeat header rows
+**XML Schema Definition**:
+```xml
+<hp:tbl inlineTable="false" pageBreak="false" repeatHeader="false">
+    <hp:shapeComponent>
+        <hp:offset x="0" y="0"/>
+        <hp:orgSz width="42520" height="12700"/>
+        <hp:curSz width="42520" height="12700"/>
+        <hp:flip horizontal="false" vertical="false"/>
+        <hp:rotationInfo angle="0"/>
+        <hp:renderingInfo>
+            <hp:scaleRotateMatrixRef ref="0"/>
+        </hp:renderingInfo>
+    </hp:shapeComponent>
+    
+    <hp:cellzoneList>
+        <hp:cellzone startRow="0" startCol="0" endRow="1" endCol="2" 
+                     borderFillIDRef="1"/>
+    </hp:cellzoneList>
+    
+    <hp:coldef>
+        <hp:col width="14173"/>
+        <hp:col width="14173"/>
+        <hp:col width="14174"/>
+    </hp:coldef>
+    
+    <hp:tr>
+        <hp:tc colspan="1" rowspan="1" width="14173" height="6350" 
+               header="false" hasMargin="false" protect="false" 
+               editable="true" dirty="false" borderFillIDRef="1">
+            <hp:p paraShapeIDRef="0">
+                <hp:run charShapeIDRef="0">
+                    <hp:t>Cell 1,1</hp:t>
+                </hp:run>
+            </hp:p>
+        </hp:tc>
+        <hp:tc colspan="1" rowspan="1" width="14173" height="6350" 
+               header="false" hasMargin="false" protect="false" 
+               editable="true" dirty="false" borderFillIDRef="1">
+            <hp:p paraShapeIDRef="0">
+                <hp:run charShapeIDRef="0">
+                    <hp:t>Cell 1,2</hp:t>
+                </hp:run>
+            </hp:p>
+        </hp:tc>
+        <hp:tc colspan="1" rowspan="1" width="14174" height="6350" 
+               header="false" hasMargin="false" protect="false" 
+               editable="true" dirty="false" borderFillIDRef="1">
+            <hp:p paraShapeIDRef="0">
+                <hp:run charShapeIDRef="0">
+                    <hp:t>Cell 1,3</hp:t>
+                </hp:run>
+            </hp:p>
+        </hp:tc>
+    </hp:tr>
+    <!-- Additional rows -->
+</hp:tbl>
+```
 
-**Child Elements**:
-- `cellzoneList`: Cell grouping and styling
-- `tr`: Table rows
-- `coldef`: Column definitions
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `inlineTable` | boolean | No | Whether table is inline or floating |
+| `pageBreak` | boolean | No | Allow page breaks within table |
+| `repeatHeader` | boolean | No | Repeat header rows on new pages |
 
-**Table Features**:
-- Merged cells and complex spanning
-- Nested tables within cells
-- Custom cell borders and backgrounds
-- Automatic row height adjustment
-- Table captioning and titling
+**XML Child Elements**:
+| Element | XML Tag | Occurrence | Description |
+|---------|---------|------------|-------------|
+| Shape Component | `<hp:shapeComponent>` | 1 | Table positioning and sizing |
+| Cell Zone List | `<hp:cellzoneList>` | 0..1 | Cell grouping and styling |
+| Column Definition | `<hp:coldef>` | 1 | Column width specifications |
+| Table Row | `<hp:tr>` | 1..* | Individual table rows |
 
 ### TrType (Table Row)
 **XML Element**: `<hp:tr>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: `<hp:tbl>`  
 **Purpose**: Horizontal grouping of table cells.
 
-**Child Elements**:
-- `tc`: Table cells
+**XML Schema Definition**:
+```xml
+<hp:tr>
+    <hp:tc colspan="1" rowspan="1" width="14173" height="6350" 
+           header="false" hasMargin="false" protect="false" 
+           editable="true" dirty="false" borderFillIDRef="1">
+        <!-- Cell content -->
+    </hp:tc>
+    <!-- Additional cells -->
+</hp:tr>
+```
+
+**XML Child Elements**:
+| Element | XML Tag | Occurrence | Description |
+|---------|---------|------------|-------------|
+| Table Cell | `<hp:tc>` | 1..* | Individual table cells |
 
 ### TcType (Table Cell)
 **XML Element**: `<hp:tc>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: `<hp:tr>`  
 **Purpose**: Individual table cell containing document content.
 
-**Attributes**:
-- `colspan`: Number of columns spanned
-- `rowspan`: Number of rows spanned
-- `width`: Cell width specification
-- `height`: Cell height specification
-- `header`: Whether cell is a header cell
-- `hasMargin`: Whether cell has custom margins
-- `protect`: Whether cell content is protected
-- `editable`: Whether cell content is editable
-- `dirty`: Whether cell content has been modified
-- `borderFillIDRef`: Reference to border/fill definition
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `colspan` | integer | No | Number of columns spanned (default: 1) |
+| `rowspan` | integer | No | Number of rows spanned (default: 1) |
+| `width` | integer | No | Cell width in HWPML units |
+| `height` | integer | No | Cell height in HWPML units |
+| `header` | boolean | No | Whether cell is a header cell |
+| `hasMargin` | boolean | No | Whether cell has custom margins |
+| `protect` | boolean | No | Whether cell content is protected |
+| `editable` | boolean | No | Whether cell content is editable |
+| `dirty` | boolean | No | Whether cell content has been modified |
+| `borderFillIDRef` | integer | No | Reference to border/fill definition |
 
-**Child Elements**:
-- `cellMargin`: Cell margin specifications
-- `p`: Cell content paragraphs
-- Any valid paragraph content including nested tables
+**XML Child Elements**:
+| Element | XML Tag | Occurrence | Description |
+|---------|---------|------------|-------------|
+| Cell Margin | `<hp:cellMargin>` | 0..1 | Custom cell margin specifications |
+| Paragraph | `<hp:p>` | 0..* | Cell content paragraphs |
+| Sub-table | `<hp:tbl>` | 0..* | Nested tables within cells |
 
-## Media and Object Elements
+## Media and Object Elements (XML Schema)
 
 ### PictureType
 **XML Element**: `<hp:pic>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: Control element within `<hp:p>`  
 **Purpose**: Embedded or linked image content with positioning and formatting.
 
-**Attributes**:
-- `reverse`: Whether image is reversed/mirrored
-- `watermark`: Whether image is used as watermark
-- `effect`: Image effects (brightness, contrast, etc.)
+**XML Schema Definition**:
+```xml
+<hp:pic reverse="false" watermark="false" effect="REAL_PIC">
+    <hp:shapeComponent>
+        <hp:offset x="0" y="0"/>
+        <hp:orgSz width="21260" height="14173"/>
+        <hp:curSz width="21260" height="14173"/>
+        <hp:flip horizontal="false" vertical="false"/>
+        <hp:rotationInfo angle="0"/>
+        <hp:renderingInfo>
+            <hp:scaleRotateMatrixRef ref="0"/>
+        </hp:renderingInfo>
+    </hp:shapeComponent>
+    
+    <hp:img src="BIN0001.png" binaryItem="BIN0001" embedded="true">
+        <hp:clip left="0" top="0" right="21260" bottom="14173"/>
+        <hp:effects>
+            <hp:shadow type="DROP_SHADOW" color="0" offsetX="283" offsetY="283" 
+                       blurRadius="141" transparency="50"/>
+        </hp:effects>
+    </hp:img>
+</hp:pic>
+```
 
-**Child Elements**:
-- `img`: Image specifications and source
-- `effects`: Visual effects and filters
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `reverse` | boolean | No | Whether image is reversed/mirrored |
+| `watermark` | boolean | No | Whether image is used as watermark |
+| `effect` | enum | No | Image effect type: "REAL_PIC", "GRAY_SCALE", "BLACK_WHITE" |
 
-**Image Properties**:
-- Source file references
-- Dimensions and scaling
-- Cropping and clipping
-- Color adjustments
-- Transparency and blending
+**XML Child Elements**:
+| Element | XML Tag | Occurrence | Description |
+|---------|---------|------------|-------------|
+| Shape Component | `<hp:shapeComponent>` | 1 | Positioning and transformation |
+| Image | `<hp:img>` | 1 | Image source and specifications |
 
 ### ImgType
 **XML Element**: `<hp:img>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: `<hp:pic>`  
 **Purpose**: Image source and display specifications.
 
-**Attributes**:
-- `src`: Image source file reference
-- `binaryItem`: Reference to binary data
-- `embedded`: Whether image is embedded or linked
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `src` | string | Yes | Image source file reference |
+| `binaryItem` | string | No | Reference to binary data in package |
+| `embedded` | boolean | No | Whether image is embedded or linked |
 
-**Child Elements**:
-- `clip`: Image clipping boundaries
-- `effects`: Image processing effects
+**XML Child Elements**:
+| Element | XML Tag | Attributes | Description |
+|---------|---------|------------|-------------|
+| Clipping | `<hp:clip>` | left, top, right, bottom | Image clipping boundaries |
+| Effects | `<hp:effects>` | - | Visual effects container |
 
 ### EquationType
 **XML Element**: `<hp:equation>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: Control element within `<hp:p>`  
 **Purpose**: Mathematical expressions and formulas.
 
-**Attributes**:
-- `name`: Equation name or identifier
-- `font`: Font used for equation rendering
-- `fontSize`: Base font size for equation
-- `textColor`: Text color for equation
-- `baseLine`: Baseline alignment
+**XML Schema Definition**:
+```xml
+<hp:equation name="Equation1" font="Cambria Math" fontSize="1100" 
+             textColor="0" baseLine="BASELINE">
+    <hp:shapeComponent>
+        <hp:offset x="0" y="0"/>
+        <hp:orgSz width="2835" height="1134"/>
+        <hp:curSz width="2835" height="1134"/>
+        <hp:flip horizontal="false" vertical="false"/>
+        <hp:rotationInfo angle="0"/>
+    </hp:shapeComponent>
+    
+    <hp:script><![CDATA[{x = {-b pm sqrt {b^2 - 4 a c}} over {2 a}}]]></hp:script>
+</hp:equation>
+```
 
-**Child Elements**:
-- `script`: Mathematical expression script/markup
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | string | No | Equation name or identifier |
+| `font` | string | No | Font used for equation rendering |
+| `fontSize` | integer | No | Base font size in HWPML units |
+| `textColor` | integer | No | Text color as RGB integer |
+| `baseLine` | enum | No | Baseline alignment: "BASELINE", "TOP", "CENTER", "BOTTOM" |
 
-**Mathematical Features**:
-- Complex fraction notation
-- Radical expressions
-- Integral and summation notation
-- Matrix and array layouts
-- Subscripts and superscripts
-- Mathematical symbols and operators
+**XML Child Elements**:
+| Element | XML Tag | Content | Description |
+|---------|---------|---------|-------------|
+| Shape Component | `<hp:shapeComponent>` | - | Positioning and sizing |
+| Script | `<hp:script>` | CDATA | Mathematical expression markup |
+
+**Mathematical Markup Features**:
+- Fraction notation: `{numerator} over {denominator}`
+- Radicals: `sqrt {expression}`, `nroot {n} {expression}`
+- Superscripts/Subscripts: `base^{super}`, `base_{sub}`
+- Summation: `sum from {start} to {end} {expression}`
+- Integration: `int from {start} to {end} {expression}`
+- Matrix notation: `matrix { a # b ## c # d }`
 
 ### OLEType
 **XML Element**: `<hp:ole>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Parent Element**: Control element within `<hp:p>`  
 **Purpose**: Embedded objects from external applications.
 
-**Attributes**:
-- `progId`: Program identifier for the embedded object
-- `drawAspect`: Display aspect (content, icon, thumbnail)
+**XML Schema Definition**:
+```xml
+<hp:ole progId="Excel.Sheet.12" drawAspect="CONTENT">
+    <hp:shapeComponent>
+        <hp:offset x="0" y="0"/>
+        <hp:orgSz width="28346" height="19843"/>
+        <hp:curSz width="28346" height="19843"/>
+        <hp:flip horizontal="false" vertical="false"/>
+        <hp:rotationInfo angle="0"/>
+    </hp:shapeComponent>
+    
+    <hp:img src="BIN0002.png" binaryItem="BIN0002" embedded="true"/>
+    
+    <!-- Binary OLE data follows -->
+    <hp:oleData>
+        <![CDATA[... base64 encoded OLE object data ...]]>
+    </hp:oleData>
+</hp:ole>
+```
 
-**Child Elements**:
-- `img`: Preview image for the object
-- Binary object data
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `progId` | string | Yes | Program identifier for the embedded object |
+| `drawAspect` | enum | No | Display aspect: "CONTENT", "ICON", "THUMBNAIL" |
 
-**OLE Object Types**:
-- Microsoft Office documents
-- Charts and graphs
-- Media files (audio, video)
-- Custom application objects
+**XML Child Elements**:
+| Element | XML Tag | Content | Description |
+|---------|---------|---------|-------------|
+| Shape Component | `<hp:shapeComponent>` | - | Positioning and sizing |
+| Preview Image | `<hp:img>` | - | Preview/thumbnail image |
+| OLE Data | `<hp:oleData>` | CDATA | Base64-encoded binary object data |
+
+**Common Program IDs**:
+- `Excel.Sheet.12`: Microsoft Excel worksheet
+- `PowerPoint.Slide.12`: Microsoft PowerPoint slide
+- `Word.Document.12`: Microsoft Word document
+- `Visio.Drawing.15`: Microsoft Visio drawing
+- `AcroExch.Document`: Adobe PDF document
 
 ## Form Controls
 
@@ -861,78 +1021,238 @@ The `<hh:font>` element supports different languages via the `lang` attribute:
 **XML Element**: `<hp:reflection>`  
 **Purpose**: Mirror reflection effects below objects.
 
-## Core Data Types
+## Core Data Types (XML Schema Primitives)
 
 ### PointType
-**Purpose**: 2D coordinate specifications.
+**XML Usage**: Attribute pairs in various elements  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/core`  
+**Purpose**: 2D coordinate specifications in HWPML units.
 
-**Attributes**:
-- `x`: Horizontal coordinate
-- `y`: Vertical coordinate
+**XML Schema Definition**:
+```xml
+<!-- Used as attributes in elements -->
+<hp:offset x="1417" y="2835"/>
+<hp:orgSz width="21260" height="14173"/>
+<hp:curSz width="21260" height="14173"/>
+```
+
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `x` | integer | Yes | Horizontal coordinate in HWPML units |
+| `y` | integer | Yes | Vertical coordinate in HWPML units |
+
+**Unit System**: HWPML uses 1/7200 inch as base unit (1 inch = 7200 HWPML units)
 
 ### RGBType
 **XML Element**: `<hp:rgb>`  
-**Purpose**: RGB color specifications.
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
+**Purpose**: RGB color specifications for display.
 
-**Attributes**:
-- `r`: Red component (0-255)
-- `g`: Green component (0-255)
-- `b`: Blue component (0-255)
+**XML Schema Definition**:
+```xml
+<hp:rgb r="255" g="128" b="64"/>
+```
+
+**XML Attributes**:
+| Attribute | Type | Required | Range | Description |
+|-----------|------|----------|-------|-------------|
+| `r` | integer | Yes | 0-255 | Red component |
+| `g` | integer | Yes | 0-255 | Green component |
+| `b` | integer | Yes | 0-255 | Blue component |
 
 ### CMYKType
 **XML Element**: `<hp:cmyk>`  
+**XML Namespace**: `http://www.hancom.co.kr/hwpml/2011/paragraph`  
 **Purpose**: CMYK color specifications for print.
 
-**Attributes**:
-- `c`: Cyan percentage
-- `m`: Magenta percentage
-- `y`: Yellow percentage
-- `k`: Black percentage
+**XML Schema Definition**:
+```xml
+<hp:cmyk c="100" m="50" y="0" k="25"/>
+```
+
+**XML Attributes**:
+| Attribute | Type | Required | Range | Description |
+|-----------|------|----------|-------|-------------|
+| `c` | integer | Yes | 0-100 | Cyan percentage |
+| `m` | integer | Yes | 0-100 | Magenta percentage |
+| `y` | integer | Yes | 0-100 | Yellow percentage |
+| `k` | integer | Yes | 0-100 | Black (Key) percentage |
 
 ### MatrixType
+**XML Usage**: Transformation matrix attributes  
 **Purpose**: 2D transformation matrices for object positioning and scaling.
 
+**XML Schema Definition**:
+```xml
+<hp:matrix e1="1.0" e2="0.0" e3="0.0" e4="1.0" e5="0.0" e6="0.0"/>
+```
+
+**Matrix Elements**:
+- `e1`: X-axis scaling factor
+- `e2`: X-axis skewing factor  
+- `e3`: Y-axis skewing factor
+- `e4`: Y-axis scaling factor
+- `e5`: X-axis translation
+- `e6`: Y-axis translation
+
 ### ImageType
+**XML Usage**: Various image-related elements  
 **Purpose**: Image data and format specifications.
 
-## Document Package Objects
+**Supported Image Formats**:
+- **PNG**: Portable Network Graphics (.png)
+- **JPEG**: Joint Photographic Experts Group (.jpg, .jpeg)
+- **GIF**: Graphics Interchange Format (.gif)
+- **BMP**: Windows Bitmap (.bmp)
+- **TIFF**: Tagged Image File Format (.tif, .tiff)
+- **SVG**: Scalable Vector Graphics (.svg)
+
+## Document Package Objects (Container XML)
 
 ### PackageType
 **XML Element**: `<package>`  
-**Purpose**: OPF package definition for document structure.
+**XML Namespace**: `http://www.idpf.org/2007/opf/`  
+**File Location**: `Contents/content.hpf`  
+**Purpose**: OPF package definition for document structure (EPUB-based).
 
-**Child Elements**:
-- `metadata`: Document metadata
-- `manifest`: File listing
-- `spine`: Reading order
+**XML Schema Definition**:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" 
+         xmlns:dc="http://purl.org/dc/elements/1.1/" 
+         unique-identifier="BookId" version="2.0">
+         
+    <metadata>
+        <dc:title>Document Title</dc:title>
+        <dc:creator>Author Name</dc:creator>
+        <dc:identifier id="BookId">unique-doc-id</dc:identifier>
+        <dc:language>ko</dc:language>
+        <meta name="HWPX-version" content="1.31"/>
+    </metadata>
+    
+    <manifest>
+        <item id="header" href="header.xml" media-type="application/xml"/>
+        <item id="section0" href="section0.xml" media-type="application/xml"/>
+        <item id="BIN0001" href="../BinData/BIN0001.png" media-type="image/png"/>
+    </manifest>
+    
+    <spine>
+        <itemref idref="section0"/>
+    </spine>
+</package>
+```
+
+**XML Child Elements**:
+| Element | XML Tag | Namespace | Description |
+|---------|---------|-----------|-------------|
+| Metadata | `<metadata>` | - | Document metadata container |
+| Manifest | `<manifest>` | - | File listing container |
+| Spine | `<spine>` | - | Reading order specification |
 
 ### ManifestType
 **XML Element**: `<manifest>`  
-**Purpose**: Complete file listing for document package.
+**XML Namespace**: `urn:oasis:names:tc:opendocument:xmlns:manifest:1.0`  
+**File Location**: `META-INF/manifest.xml`  
+**Purpose**: Complete file listing for document package (ODF-based).
 
-**Child Elements**:
-- `item`: Individual file entries
+**XML Schema Definition**:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0">
+    <file-entry media-type="application/vnd.hancom.hwpx" full-path="/"/>
+    <file-entry media-type="application/xml" full-path="Contents/content.hpf"/>
+    <file-entry media-type="application/xml" full-path="Contents/header.xml"/>
+    <file-entry media-type="application/xml" full-path="Contents/section0.xml"/>
+    <file-entry media-type="image/png" full-path="BinData/BIN0001.png"/>
+    <file-entry media-type="image/jpeg" full-path="BinData/BIN0002.jpg"/>
+</manifest>
+```
+
+**XML Child Elements**:
+| Element | XML Tag | Attributes | Description |
+|---------|---------|------------|-------------|
+| File Entry | `<file-entry>` | media-type, full-path | Individual file registry |
 
 ### ItemType
 **XML Element**: `<item>`  
-**Purpose**: Individual file entry in manifest.
+**XML Namespace**: `http://www.idpf.org/2007/opf/`  
+**Parent Element**: `<manifest>` (in content.hpf)  
+**Purpose**: Individual file entry in content manifest.
 
-**Attributes**:
-- `id`: Unique item identifier
-- `href`: File path within package
-- `media-type`: MIME type of file
+**XML Attributes**:
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | string | Yes | Unique item identifier |
+| `href` | string | Yes | File path relative to content.hpf |
+| `media-type` | string | Yes | MIME type of the file |
 
 ### MetadataType
 **XML Element**: `<metadata>`  
+**XML Namespace**: Mix of Dublin Core and OPF  
+**Parent Element**: `<package>`  
 **Purpose**: Document metadata in Dublin Core format.
 
-**Child Elements**:
-- `title`: Document title
-- `creator`: Document author
-- `subject`: Document subject/topic
-- `description`: Document description
-- `publisher`: Publishing information
-- `date`: Creation/modification dates
-- `language`: Document language
+**XML Schema Definition**:
+```xml
+<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:title>HWPX Document Title</dc:title>
+    <dc:creator>Document Author</dc:creator>
+    <dc:subject>Document Subject</dc:subject>
+    <dc:description>Document description and summary</dc:description>
+    <dc:publisher>Publishing Organization</dc:publisher>
+    <dc:date>2023-12-07T10:30:00Z</dc:date>
+    <dc:language>ko-KR</dc:language>
+    <dc:identifier id="DocId">hwpx-doc-12345</dc:identifier>
+    <meta name="HWPX-version" content="1.31"/>
+    <meta name="HWPX-application" content="Hancom Office Hangul"/>
+</metadata>
+```
 
-This comprehensive reference covers every major object type in the HWPX document model, providing detailed specifications for structure, attributes, and relationships between objects.
+**Dublin Core Elements**:
+| Element | XML Tag | Description |
+|---------|---------|-------------|
+| Title | `<dc:title>` | Document title |
+| Creator | `<dc:creator>` | Document author/creator |
+| Subject | `<dc:subject>` | Document subject/topic |
+| Description | `<dc:description>` | Document description |
+| Publisher | `<dc:publisher>` | Publishing information |
+| Date | `<dc:date>` | Creation/modification dates (ISO 8601) |
+| Language | `<dc:language>` | Document language (RFC 3066) |
+| Identifier | `<dc:identifier>` | Unique document identifier |
+
+## XML Validation and Schema Information
+
+### Schema Validation
+HWPX documents follow multiple XML schema standards:
+
+1. **OWPML Schema**: Custom schema for document content
+2. **OPF Schema**: EPUB Open Packaging Format for container
+3. **ODF Schema**: OpenDocument Format for manifest
+4. **Dublin Core**: Metadata standards
+
+### Namespace Validation
+All HWPX XML files must declare appropriate namespaces:
+
+```xml
+<!-- Header file namespace declarations -->
+<hh:head xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head"
+         xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph"
+         xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section"
+         xmlns:hc="http://www.hancom.co.kr/hwpml/2011/core">
+
+<!-- Section file namespace declarations -->  
+<hs:sec xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section"
+        xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph">
+
+<!-- Container file namespace declarations -->
+<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+```
+
+### Character Encoding
+All HWPX XML files use UTF-8 encoding:
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+```
+
+This comprehensive XML-focused reference provides detailed specifications for every major object type in the HWPX document model, emphasizing XML structure, namespaces, schemas, and validation requirements.
